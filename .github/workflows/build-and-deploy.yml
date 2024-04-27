@@ -1,4 +1,4 @@
-name: Build and Deploy Website
+name: Deploy static content to Pages
 
 on:
   push:
@@ -37,11 +37,13 @@ jobs:
           ./emsdk install latest
           ./emsdk activate latest
           source ./emsdk_env.sh
+          echo "EMSDK environment is activated."
 
       - name: Build with Make
         run: |
           source ./emsdk/emsdk_env.sh
-          make -C src all
+          make all
+        working-directory: ${{ github.workspace }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
