@@ -1,7 +1,7 @@
 CC=emcc
 SRC_DIR=./src
 OUT_DIR=./public/scripts/wasm
-SOURCES=$(SRC_DIR)/GeneticAlgorithm.cpp
+SOURCES=$(wildcard $(SRC_DIR)/*.cpp)
 OUTPUT_JS=$(OUT_DIR)/ga.js
 OUTPUT_WASM=$(OUT_DIR)/ga.wasm
 
@@ -13,7 +13,8 @@ CFLAGS=-O3 -s WASM=1 \
 all: clean $(OUTPUT_JS)
 
 $(OUTPUT_JS): $(SOURCES)
-	$(CC) $(CFLAGS) $(SOURCES) -o $(OUTPUT_JS)
+	if [ ! -d $(OUT_DIR) ]; then mkdir -p $(OUT_DIR); fi
+	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
 	rm -f $(OUTPUT_JS) $(OUTPUT_WASM)

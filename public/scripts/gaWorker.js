@@ -1,4 +1,4 @@
-self.importScripts('wasm/ga.js');
+self.importScripts('wasm/ga.js'); // Import the compiled WebAssembly module
 
 self.onmessage = function(e) {
     const { iterations, populationSize } = e.data;

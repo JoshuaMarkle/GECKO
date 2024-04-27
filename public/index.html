@@ -11,7 +11,7 @@
     <button onclick="startGA()">Start Optimization</button>
     <div id="bestResult"></div>
 	<script>
-		let worker = new Worker('gaWorker.js');
+		let worker = new Worker('scripts/gaWorker.js');
 
 		worker.onmessage = function(e) {
 			const { type, iteration, best, result, message } = e.data;

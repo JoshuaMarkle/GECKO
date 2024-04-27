@@ -1,5 +1,4 @@
 // Filename: GeneticAlgorithm.cpp
-
 #include <vector>
 #include <cstdlib>
 #include <ctime>
