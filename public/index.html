@@ -1,36 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-	<link rel="icon" href="data:,">
-    <title>Genetic Algorithm WebAssembly Example</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Keyboard Grid Manipulation</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input type="number" id="iterations" placeholder="Iterations">
-    <input type="number" id="populationSize" placeholder="Population Size">
-    <button onclick="startGA()">Start Optimization</button>
-    <div id="bestResult"></div>
-	<script>
-		const worker = new Worker('scripts/worker.js');
-
-		worker.onmessage = function(e) {
-			const { type, generation, bestValue, bestKeyboard, message } = e.data;
-			switch (type) {
-				case 'update':
-					console.log(`Generation: ${generation} Best Value: ${bestValue} Best Keyboard: ${bestKeyboard}`);
-					break;
-				case 'print':
-					console.log(`Message from worker: ${message}`);
-					break;
-				case 'complete':
-					console.log('Optimization complete');
-					break;
-			}
-		};
-
-		function startGA() {
-			worker.postMessage({});
-		}
-	</script>
+    <div id="leftSidebar">
+        <button id="addMode"><i class="fa fa-paint-brush" style="font-size:36px"></i></button>
+        <button id="deleteMode"><i class="fa fa-eraser" style="font-size:36px"></i></button>
+        <button id="dragMode"><i class="fa fa-hand-pointer-o" style="font-size:36px"></i></button>
+        <button id="selectMode"><i class="fa fa-square-o" style="font-size:36px"></i></button>
+    </div>
+    <div id="gridContainer"></div>
+    <div id="rightSidebar">
+		<h2>Layers</h2>
+		<button class="layer-btn" id="layer-btn-1">Normal</button>
+		<button class="layer-btn" id="layer-btn-2">Difficulty</button>
+		<button class="layer-btn" id="layer-btn-3">Finger</button>
+        <h2>Key Info</h2>
+        <div id="keyDetails"></div>
+    </div>
+    <script type="module" src="scripts/paint.js"></script>
 </body>
 </html>
