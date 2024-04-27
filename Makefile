@@ -6,7 +6,7 @@ OUTPUT_JS=$(OUT_DIR)/ga.js
 OUTPUT_WASM=$(OUT_DIR)/ga.wasm
 
 CFLAGS=-O3 -s WASM=1 \
-       -s "EXPORTED_FUNCTIONS=['_runGA']" \
+       -s "EXPORTED_FUNCTIONS=['_runOptimization']" \
        -s "EXPORTED_RUNTIME_METHODS=['ccall', 'cwrap']" \
        -s "ALLOW_MEMORY_GROWTH=1"
 

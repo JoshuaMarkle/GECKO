@@ -1,66 +1,60 @@
-// Filename: GeneticAlgorithm.cpp
+#include <iostream>
+#include <algorithm>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
-#include <cmath>
+#include <string>
+#include <random>
 #include <emscripten.h>
 
-// Simple fitness function: f(x) = x^2
-float fitnessFunction(int x) {
-    return pow(x, 2);
-}
+using namespace std;
 
-// Generate initial population
-std::vector<int> generatePopulation(int size) {
-    std::vector<int> population(size);
-    for (int i = 0; i < size; i++) {
-        population[i] = rand() % 100; // Random integers between 0 and 99
+const int GENERATIONS = 1000;
+const int POPULATION = 100;
+const int KEY_COUNT = 30;
+
+double calculateValue(const string &keyboard, int keyNum) {
+    double value = 0;
+    for (int i = 0; i < keyNum; i++) {
+        value += i * keyboard[i];
     }
-    return population;
+    return value;
 }
 
-// Simple selection and crossover function
-int crossover(int x, int y) {
-    return (x + y) / 2;
+void mutateKeyboard(string &keyboard) {
+    int numMutations = rand() % 5;
+    for (int i = 0; i < numMutations; ++i) {
+        int idx1 = rand() % keyboard.size();
+        int idx2 = rand() % keyboard.size();
+        swap(keyboard[idx1], keyboard[idx2]);
+    }
 }
 
-// Mutation function
-int mutate(int x) {
-    return x + (rand() % 20 - 10); // Randomly increase or decrease by up to 10
-}
-
-// Genetic algorithm implementation
 extern "C" {
     EMSCRIPTEN_KEEPALIVE
-    int runGA(int iterations, int populationSize) {
-        srand(time(NULL));
-        auto population = generatePopulation(populationSize);
-        int best = 0;
+    void runOptimization() {
+        vector<string> keyboards(POPULATION, "abcdefghijklmnopqrstuvwxyz;',.");
+        string bestKeyboard = keyboards[0];
+        double bestValue = calculateValue(bestKeyboard, KEY_COUNT);
+        bool newBest;
 
-        for (int i = 0; i < iterations; i++) {
-            for (int j = 0; j < populationSize; j++) {
-                int k = rand() % populationSize;
-                int l = rand() % populationSize;
-                int offspring = crossover(population[k], population[l]);
-                offspring = mutate(offspring);
-                float currentFitness = fitnessFunction(population[j]);
-                float offspringFitness = fitnessFunction(offspring);
+        for (int gen = 0; gen < GENERATIONS; gen++) {
+            newBest = false;
+            for (int i = 0; i < POPULATION; i++) {
+                mutateKeyboard(keyboards[i]);
+                double value = calculateValue(keyboards[i], KEY_COUNT);
 
-                if (offspringFitness > currentFitness) {
-                    population[j] = offspring;
+                if (value > bestValue) {
+                    bestValue = value;
+                    bestKeyboard = keyboards[i];
+                    newBest = true;
                 }
+            }
 
-                if (fitnessFunction(population[j]) > fitnessFunction(best)) {
-                    best = population[j];
-                }
-
-                // Call JavaScript to update UI
+            if (newBest) {
                 EM_ASM({
-                    updateUI($0, $1);
-                }, i, best);
+                    updateUI($0, $1, UTF8ToString($2));
+                }, gen, bestValue, bestKeyboard.c_str());
             }
         }
-
-        return best;
     }
 }
+
