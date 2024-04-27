@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById('selectMode').addEventListener('click', () => currentMode = 'select');
 
     gridContainer.addEventListener('click', (e) => {
-        if (currentMode === 'add' && e.target === gridContainer) {
+        if (currentMode === 'add') {
             let rect = gridContainer.getBoundingClientRect();
             let key = keyManager.addKey(e.clientX - rect.left, e.clientY - rect.top);
             displayKey(key);
@@ -114,17 +114,6 @@ document.addEventListener("DOMContentLoaded", function() {
 											   <div>Main Finger Rest: ${keyData.mainFingerRest}</div>`;
 			} else {
 				console.log('No data found for key with index:', index);
-			}
-		});
-	}
-
-	function selectLayer(layerId) {
-		const buttons = document.querySelectorAll('.layer-btn');
-		buttons.forEach(btn => {
-			if (parseInt(btn.getAttribute('onclick').match(/\d+/)[0]) === layerId) {
-				btn.classList.add('selected');
-			} else {
-				btn.classList.remove('selected');
 			}
 		});
 	}

@@ -6,6 +6,7 @@
 	<title>Keyboard Grid Manipulation</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="style.css">
+	<script src="scripts/editor.js"></script>
 </head>
 <body>
     <div id="leftSidebar">
@@ -15,14 +16,20 @@
         <button id="selectMode"><i class="fa fa-square-o" style="font-size:36px"></i></button>
     </div>
     <div id="gridContainer"></div>
-    <div id="rightSidebar">
-		<h2>Layers</h2>
-		<button class="layer-btn" id="layer-btn-1">Normal</button>
-		<button class="layer-btn" id="layer-btn-2">Difficulty</button>
-		<button class="layer-btn" id="layer-btn-3">Finger</button>
-        <h2>Key Info</h2>
-        <div id="keyDetails"></div>
-    </div>
-    <script type="module" src="scripts/paint.js"></script>
+	<div id="rightSidebar">
+		<div id="keyInfoContainer">
+			<h2>Key Info</h2>
+			<div id="keyDetails"></div>
+		</div>
+		<div id="draggableDivider"></div>
+		<div id="layerContainer">
+			<h2>Layers</h2>
+			<button class="layer-btn" id="layer-btn-1" onclick="selectLayer(1)">Normal</button>
+			<button class="layer-btn" id="layer-btn-2" onclick="selectLayer(2)">Difficulty</button>
+			<button class="layer-btn" id="layer-btn-3" onclick="selectLayer(3)">Finger Number</button>
+			<button class="layer-btn" id="layer-btn-4" onclick="selectLayer(4)">Finger Resting</button>
+		</div>
+	</div>
+   <script type="module" src="scripts/paint.js"></script>
 </body>
 </html>

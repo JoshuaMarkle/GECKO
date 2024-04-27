@@ -54,12 +54,23 @@ body::before {
 }
 
 #rightSidebar {
-    width: 200px;
+    width: 250px;
     background: var(--light-gray);
-    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+#keyInfoContainer, #layerContainer {
+	padding-left: 10px;
+	padding-right: 10px;
+    overflow: auto;
+}
+
+#draggableDivider {
+    height: 2px;
+    background-color: var(--gray);
+    cursor: ns-resize;
 }
 
 .layer-btn {
