@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genetic Algorithm WebAssembly Example</title>
+    <script src="scripts/wasm/ga.js"></script>
+</head>
+<body>
+    <input type="number" id="iterations" placeholder="Iterations">
+    <input type="number" id="populationSize" placeholder="Population Size">
+    <button onclick="startGA()">Start Optimization</button>
+    <div id="bestResult"></div>
+	<script>
+		let worker = new Worker('gaWorker.js');
+
+		worker.onmessage = function(e) {
+			const { type, iteration, best, result, message } = e.data;
+			if (type === 'update') {
+				document.getElementById('bestResult').innerHTML = `Iteration: ${iteration}, Best Result: ${best}`;
+			} else if (type === 'complete') {
+				document.getElementById('bestResult').innerHTML = `Optimization complete. Best Result: ${result}`;
+			} else if (type === 'print') {
+				console.log(message);
+			}
+		};
+
+		function startGA() {
+			const iterations = document.getElementById('iterations').value;
+			const populationSize = document.getElementById('populationSize').value;
+			worker.postMessage({ iterations, populationSize });
+		}
+	</script>
+</body>
+</html>
