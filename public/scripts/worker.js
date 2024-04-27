@@ -1,4 +1,4 @@
-self.importScripts('ga.js');
+self.importScripts('wasm/ga.js');
 
 self.onmessage = function(e) {
     // const { iterations, populationSize } = e.data;
