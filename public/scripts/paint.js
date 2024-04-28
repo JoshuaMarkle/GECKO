@@ -8,18 +8,24 @@ document.addEventListener("DOMContentLoaded", function() {
     const keySize = gridSize * 3;
     let currentMode = 'add';
 
-    function setupGrid() {
-        for (let i = 0; i < 600; i++) { // Large example grid
-            let cell = document.createElement('div');
-            cell.className = 'grid-cell';
-            gridContainer.appendChild(cell);
-        }
-    }
+	// Change Editing Modes
+	document.getElementById('addMode').addEventListener('click', () => changeMode('add'));
+	document.getElementById('deleteMode').addEventListener('click', () => changeMode('delete'));
+	document.getElementById('dragMode').addEventListener('click', () => changeMode('drag'));
+	document.getElementById('selectMode').addEventListener('click', () => changeMode('select'));
+	changeMode('add');
 
-    document.getElementById('addMode').addEventListener('click', () => currentMode = 'add');
-    document.getElementById('deleteMode').addEventListener('click', () => currentMode = 'delete');
-    document.getElementById('dragMode').addEventListener('click', () => currentMode = 'drag');
-	document.getElementById('selectMode').addEventListener('click', () => currentMode = 'select');
+	function changeMode(mode) {
+		currentMode = mode;
+		const modeButtons = document.querySelectorAll('.mode-btn');
+		modeButtons.forEach(button => {
+			if (button.id === mode + 'Mode') {
+				button.classList.add('selected');
+			} else {
+				button.classList.remove('selected');
+			}
+		});
+	}
 
     gridContainer.addEventListener('click', (e) => {
         if (currentMode === 'add') {
@@ -54,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 offsetX = e.clientX - parseInt(keyElement.style.left) - gridSize;
                 offsetY = e.clientY - parseInt(keyElement.style.top) - gridSize;
                 keyElement.style.opacity = '0.7';
+                keyElement.style.zIndex = '2';
                 e.preventDefault(); // Prevent drag behavior from interfering
             } else if (currentMode === 'delete') {
                 gridContainer.removeChild(keyElement);
@@ -73,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.addEventListener('mouseup', () => {
             if (moving) {
                 keyElement.style.opacity = '1';
+                keyElement.style.zIndex = '1';
                 moving = false;
             }
         });
@@ -117,6 +125,4 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		});
 	}
-
-    setupGrid();
 });

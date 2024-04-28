@@ -9,6 +9,8 @@
 	--orange: #ffb347;
 	--blue: #55aaff;
 	--purple: #a29bfe;
+
+	--blue-dark: #4D9BE8;
 }
 
 body {
@@ -16,6 +18,15 @@ body {
 	margin: 0;
 	height: 100vh;
 	font-family: Arial, Helvetica, sans-serif;
+	font-size: calc(15px + 0.390625vw);
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+p {
+	font-size: 1rem;
 }
 
 /* --- BACKGROUND GRID --- */
@@ -34,23 +45,43 @@ body::before {
 }
 
 #leftSidebar {
-	width: 50px;
-    background: var(--light-gray);
+	position: absolute;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     padding: 10px;
 }
 
 #leftSidebar button {
-	background: none;
-	border: none;
-	border-radius: 5px;
+	background: var(--light-gray);
 	color: var(--black);
+	border: none;
+	padding: 10px;
+	z-index: 10;
+}
+
+#leftSidebar button:first-child {
+	border-radius: 5px 5px 0px 0px;
+}
+
+#leftSidebar button:last-child {
+	border-radius: 0px 0px 5px 5px;
 }
 
 #leftSidebar button:hover {
-	color: var(--dark-gray);
+	background: var(--gray);
+}
+
+#leftSidebar button.selected {
+    background-color: var(--blue);
+    color: white;
+}
+
+#leftSidebar button.selected:hover {
+    background-color: var(--blue-dark);
+}
+
+#leftSidebar i {
+	font-size: 2rem;
 }
 
 #rightSidebar {
@@ -74,6 +105,7 @@ body::before {
 }
 
 .layer-btn {
+	font-size: 1rem;
     width: 100%;
     padding: 8px;
     border: none;
@@ -82,7 +114,7 @@ body::before {
     text-align: left;
 }
 
-.layer-btn.selected {
+.selected {
     background-color: var(--blue);
     color: white;
 }
@@ -126,7 +158,7 @@ body::before {
 }
 
 #keyDetails {
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 .key-top {
@@ -137,7 +169,7 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 1rem;
 	pointer-events: none;
 	transform: translateY(-4px);
 }

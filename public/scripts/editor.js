@@ -37,5 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
     }
+
+	selectLayer(1);
 });
 
