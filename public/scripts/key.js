@@ -9,6 +9,7 @@ class Key {
         this.difficulty = difficulty;
         this.fingerNumber = fingerNumber;
         this.mainFingerRest = mainFingerRest;
+		this.selected = false;
     }
 }
 
@@ -18,7 +19,7 @@ class KeyManager {
     }
 
     addKey(x, y) {
-        const index = this.keys.length + 1; // Simple index generation
+        const index = this.keys.length + 1; // Unique index for each key
         const key = new Key(index, x, y);
         this.keys.push(key);
         return key;
@@ -31,16 +32,23 @@ class KeyManager {
         }
     }
 
-	getKey(index) {
-		console.log('Fetching key with index:', index); // Logging to debug
-		return this.keys.find(k => k.index === index);
-	}
+    getKey(index) {
+        return this.keys.find(k => k.index === index);
+    }
 
-    updateKey(index, properties) {
+    toggleSelection(index) {
         const key = this.getKey(index);
         if (key) {
-            Object.assign(key, properties);
+            key.selected = !key.selected;
         }
+    }
+
+    deselectAll() {
+        this.keys.forEach(key => key.selected = false);
+    }
+
+    getSelectedKeys() {
+        return this.keys.filter(key => key.selected);
     }
 }
 

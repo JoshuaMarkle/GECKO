@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
             let rect = gridContainer.getBoundingClientRect();
             let key = keyManager.addKey(e.clientX - rect.left, e.clientY - rect.top);
             displayKey(key);
+			updateHierarchy();
         }
     });
 
@@ -88,41 +89,59 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	gridContainer.addEventListener('click', (e) => {
 		if (currentMode === 'select') {
-			if (e.target.className.includes('key')) {
+			if (e.target.classList.contains('key')) {
 				toggleKeySelection(e.target);
-				displayKeyInfo();
 			} else {
 				deselectAllKeys();
-				displayKeyInfo();
 			}
+			updateHierarchy();
 		}
 	});
 
-	function toggleKeySelection(keyElement) {
-		keyElement.classList.toggle('selected');
+	function toggleKeySelection(keyOrIndex) {
+		let keyElement;
+
+		if (typeof keyOrIndex === 'number') {
+			// From hierarchy, where only index might be passed
+			keyManager.toggleSelection(keyOrIndex);
+			keyElement = document.querySelector(`.key[data-index="${keyOrIndex}"]`);
+		} else if (keyOrIndex instanceof Element) {
+			// From grid interaction, where the element is passed
+			const index = parseInt(keyOrIndex.dataset.index);
+			keyManager.toggleSelection(index);
+			keyElement = keyOrIndex;
+		}
+
+		if (keyElement) {
+			keyElement.classList.toggle('selected'); // Toggle visual state
+		}
+		updateHierarchy(); // Reflect changes in the hierarchy
 	}
 
 	function deselectAllKeys() {
-		document.querySelectorAll('.key.selected').forEach(k => k.classList.remove('selected'));
+		keyManager.deselectAll();
+		document.querySelectorAll('.key').forEach(k => k.classList.remove('selected'));
+		updateHierarchy(); // Reflect the change
 	}
 
-	function displayKeyInfo() {
-		const selectedKeys = document.querySelectorAll('.key.selected');
-		const detailsContainer = document.getElementById('keyDetails');
-		detailsContainer.innerHTML = '';
+	function updateHierarchy() {
+		const keyList = document.getElementById('keyList');
+		keyList.innerHTML = ''; // Clear the current list
 
-		selectedKeys.forEach(key => {
-			const index = parseInt(key.dataset.index);
-			const keyData = keyManager.getKey(index);
-			if (keyData) {
-				detailsContainer.innerHTML += `<div>Index: ${keyData.index}</div>
-											   <div>Letter: ${keyData.letter}</div>
-											   <div>Difficulty: ${keyData.difficulty}</div>
-											   <div>Finger Number: ${keyData.fingerNumber}</div>
-											   <div>Main Finger Rest: ${keyData.mainFingerRest}</div>`;
-			} else {
-				console.log('No data found for key with index:', index);
+		keyManager.keys.forEach(key => {
+			const listItem = document.createElement('li');
+			listItem.textContent = `Key ${key.index}: ${key.letter}`;
+			listItem.dataset.index = key.index;
+			listItem.className = 'key-item';
+			if (key.selected) {
+				listItem.classList.add('selected');
 			}
+
+			listItem.addEventListener('click', () => {
+				toggleKeySelection(key.index); // Pass the index directly
+			});
+
+			keyList.appendChild(listItem);
 		});
 	}
 });
